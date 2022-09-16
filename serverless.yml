@@ -1,0 +1,45 @@
+service: ChangeMe
+package:
+  individually: true
+frameworkVersion: "3.22.0"
+configValidationMode: error
+
+plugins:
+  - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: yes
+    serializedCompile: true
+    packager: npm
+  domainName: my.example.com # Change Me
+  hostedZoneId: XXXXXX # Change Me
+  bucketRegion: us-west-2 # Change Me
+  sourceToken: "xxxxxxxx" # Change Me
+  origin:
+    # Omit .{self:custom.bucketRegion} if the bucket region is us-east-1
+    DomainName: ${self:custom.domainName}.s3-website.${self:custom.bucketRegion}.amazonaws.com
+    CustomOriginConfig:
+      OriginProtocolPolicy: http-only
+    OriginCustomHeaders:
+      - HeaderName: "Referer"
+        HeaderValue: ${self:custom.sourceToken}
+provider:
+  name: aws
+  deploymentBucket:
+    blockPublicAccess: true
+    skipPolicySetup: true
+    name: deploymentBucket-in-us-east-1 # Change Me
+
+  runtime: nodejs16.x
+  stage: ${env:STAGE, 'dev'}
+  region: us-east-1
+  endpointType: REGIONAL
+  stackTags:
+    Service: ${self:service}
+  logRetentionInDays: 14
+functions:
+  - ${file(./src/handlers/serverless.yml)}
+resources:
+  - ${file(./resources/serverless.yml)}

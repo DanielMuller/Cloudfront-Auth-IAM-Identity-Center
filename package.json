@@ -1,0 +1,44 @@
+{
+  "name": "cloudfront-saml",
+  "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "node": ">=16.14 <17"
+  },
+  "scripts": {
+    "deploy:env": "npm run lint && npx serverless deploy --stage $NODE_ENV",
+    "deploy:dev": "export NODE_ENV=dev && npm run deploy:env",
+    "deploy:staging": "export NODE_ENV=staging && npm run deploy:env",
+    "deploy:demo": "export NODE_ENV=demo && npm run deploy:env",
+    "deploy:production": "export NODE_ENV=production && npm run deploy:env",
+    "build": "npm run lint && npx serverless webpack",
+    "lint": "npm run prettier:fix && npm run ts:check && npm run eslint:check",
+    "ts:check": "npx tsc --noEmit",
+    "eslint:fix": "npx eslint src --ext ts,js --fix",
+    "eslint:check": "npx eslint src --ext ts,js",
+    "prettier:fix": "npx prettier --write '**/*.{ts,js,json,yml,yaml,md}'"
+  },
+  "dependencies": {
+    "samlify": "2.8.5"
+  },
+  "devDependencies": {
+    "@aws-sdk/types": "3.168.0",
+    "@types/aws-lambda": "8.10.103",
+    "@types/eslint": "8.4.6",
+    "@types/node": "^16.0.0",
+    "@typescript-eslint/eslint-plugin": "5.36.2",
+    "@typescript-eslint/parser": "5.36.2",
+    "clean-webpack-plugin": "4.0.0",
+    "eslint": "8.23.1",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-jsdoc": "39.3.6",
+    "prettier": "2.7.1",
+    "serverless": "3.22.0",
+    "serverless-webpack": "5.9.1",
+    "ts-loader": "9.3.1",
+    "tsconfig-paths-webpack-plugin": "4.0.0",
+    "typescript": "4.8.2",
+    "webpack": "5.74.0",
+    "webpack-cli": "4.10.0"
+  }
+}

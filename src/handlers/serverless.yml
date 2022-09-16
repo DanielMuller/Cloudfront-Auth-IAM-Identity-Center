@@ -1,0 +1,64 @@
+acs:
+  handler: src/handlers/acs.handler
+  timeout: 5
+  events:
+    - cloudFront:
+        eventType: viewer-request
+        includeBody: true
+        pathPattern: /saml/acs
+        origin: ${self:custom.origin}
+        cachePolicy:
+          id: 658327ea-f89d-4fab-a63d-7e88639e58f6
+        behavior:
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - "GET"
+            - "HEAD"
+            - "OPTIONS"
+            - "PUT"
+            - "POST"
+            - "PATCH"
+            - "DELETE"
+          Compress: true
+metadata:
+  handler: src/handlers/metadata.handler
+  timeout: 5
+  events:
+    - cloudFront:
+        eventType: viewer-request
+        pathPattern: /saml/metadata.xml
+        origin: ${self:custom.origin}
+        cachePolicy:
+          id: 658327ea-f89d-4fab-a63d-7e88639e58f6
+        behavior:
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - "GET"
+            - "HEAD"
+            - "OPTIONS"
+          CachedMethods:
+            - "GET"
+            - "HEAD"
+            - "OPTIONS"
+          Compress: true
+protect:
+  handler: src/handlers/protect.handler
+  timeout: 5
+  events:
+    - cloudFront:
+        eventType: viewer-request
+        origin: ${self:custom.origin}
+        isDefaultOrigin: true
+        cachePolicy:
+          id: 658327ea-f89d-4fab-a63d-7e88639e58f6
+        behavior:
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - "GET"
+            - "HEAD"
+            - "OPTIONS"
+          CachedMethods:
+            - "GET"
+            - "HEAD"
+            - "OPTIONS"
+          Compress: true
